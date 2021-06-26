@@ -1,0 +1,95 @@
+1、
+
+Reassemble out-of-order data
+
+Packets of a protocol are divided into several data segments during transmission. The received data segments may be duplicated, lost, or out of order.
+The format of each data segment is as follows:
+
+DataType	SegIndex	EndFlag	ContentLen	Content
+DataType：Data type of the data segment, value range [0,9]
+SegIndex：The Index of the data segment in the data packet, value range [0,100000]
+EndFlag：Indicates whether this data segment is the last segment of the data packet. If yes, the value is 1. If no, the value is 0.
+ContentLen：Length of the actual content，value range[2,5]
+Content：The actual content of this data segment
+Given a batch of received data segments and a data type, reassemble the data packets of this data type. The reassembly and output rules are as follows:
+
+Successful reassembly must be complete data: the SegIndex starts at 0 and is consecutive, and only the data segment with the largest index has an EndFlag of 1.
+
+If the reassembly is successful, the Content of the data type is combined into a character string based on the SegIndex in ascending order and output. If the segment indexs are duplicate, ignore the duplicate one.
+
+If not successfully reassembled, please output the string NA。
+
+Requirements
+Time Limits: C/C++ 1000ms, Other languages：2000ms
+
+Memory Limits: C/C++ 256MB, Other languages：512MB
+
+Inputs
+An integer N in the first line, indicating the number of data segments. The value range is [1,1000000]
+Each line of the next N lines is a data segment.
+The last line is an integer that represents the data type that needs to be reorganized.
+Tips：The test case ensures that the content of each data segment meets the format and range requirements. Repeated data segments ensure that the entire data segment is exactly the same. In addition, the EndFlag 1 of one data type can only appear in the data segment with the largest sequence number.
+
+Outputs
+Reassembled packet content, or character string NA.
+
+
+
+Sample1
+copyInputs：
+7
+0 1 0 5 hello
+1 2 1 2 CC
+0 3 1 5 world
+0 0 0 3 Say
+1 0 0 2 AA
+0 2 0 2 to
+1 1 0 2 BB
+0
+
+copyOutputs：
+Sayhellotoworld
+
+Prompts：
+The data segment
+
+0	1	0	5	hello
+indicates the DataType is 0, the SegIndex is 1, the EndFlag is 0, the ContentLen is 5, and the actual Content is “hello”.
+The 0 in the last line indicate that data packets of data type 0 need to be reassembled.
+The data segments of data type 0 are as follows:
+
+0	1	0	5	hello
+0	3	1	5	world
+0	0	0	3	say
+0	2	0	2	to
+Recombines according to the index of segments until the end flag 1. The output after recombining is: Sayhellotoworld
+
+
+Sample2
+copyInputs：
+2
+9 2 1 5 world
+9 1 0 5 hello
+9
+
+copyOutputs：
+NA
+
+Prompts：
+Miss 0 for the segment index. Therefore, NA is output.
+
+
+2
+1 1 1 5 world
+1 0 0 5 hello
+1
+
+7
+0 1 0 5 hello
+1 2 1 2 CC
+0 3 1 5 world
+0 0 0 3 Say
+1 0 0 2 AA
+0 2 0 2 to
+1 1 0 2 BB
+0
