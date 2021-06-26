@@ -1,0 +1,67 @@
+2、
+
+A Simple DHCP Server
+
+The DHCP server assigns a unique IP address to each MAC address. Assume that a total of 256 usable addresses (in dotted decimal notation) now can be assigned within an IP address pool from 192.168. 0.0 to 192.168. 0.255. Implement a simple DHCP server with the following functions:
+
+Request: Allocates IP addresses in the IP address pool based on the entered MAC address.
+If the IP address has been allocated but not released, it means the IP address is applied repeatedly and the allocated IP address is directly returned.
+If a MAC address has been applied an IP address and released it, and then, this MAC address try to apply an IP address again. The last IP address, which is assigned to this MAC address before, is preferentially allocated to the MAC address and returned.
+Allocate IP addresses that have not been allocated in ascending order. If all IP addresses in the address pool have been allocated before, the IP addresses that have been released are allocated in ascending order. If the IP address can be assigned successfully, the IP address is returned.
+If the allocation still fails, NA is returned.
+Release: Releases the allocated IP address based on the entered MAC address.
+If the corresponding IP address to be released has been allocated, release the IP address.
+If the corresponding IP address to be released does not exist, do nothing.
+Requirements
+Time Limits: C/C++ 1000ms, Other languages：2000ms
+
+Memory Limits: C/C++ 64MB, Other languages：128MB
+
+Inputs
+An integer N in the first line, indicating the number of subsequent commands. The value range is [1,2000]
+Each line of the next N lines is a command as follows:
+
+Command = MAC address.
+There are only two commands: REQUEST and RELEASE, which indicate allocation and release respectively.
+The MAC address consists of 12 uppercase letters or digits, for example, AABBCCDDEEF1.
+
+Outputs
+For REQUEST command, output the allocation result (IP address string or NA string).
+For RELEASE command, output nothing.
+> Note: The prefix 0 is not set for each segment of the IP address.
+Sample1
+copyInputs：
+2
+REQUEST=AABBCCDDEEF1
+RELEASE=AABBCCDDEEF1
+
+copyOutputs：
+192.168.0.0
+
+Prompts：
+REQUEST=AABBCCDDEEF1 Allocate unused IP addresses in ascending order. The output value is 192.168. 0.0.
+RELEASE=AABBCCDDEEF1 is not output.
+
+Sample2
+copyInputs：
+6
+REQUEST=AABBCCDDEEF1
+REQUEST=F2FBBCCDDEEF
+RELEASE=AABBCCDDEEF1
+RELEASE=F2FBBCCDDEEF
+REQUEST=333333333333
+REQUEST=F2FBBCCDDEEF
+
+copyOutputs：
+192.168.0.0
+192.168.0.1
+192.168.0.2
+192.168.0.1
+
+Prompts：
+REQUEST=AAABBCCDDEEF1 Allocate IP addresses that have not been used in ascending order. The IP addresses are 192.168. 0.0.
+REQUEST=F2FBBCCDDEEF Allocates IP addresses that have not been used in ascending order. The IP addresses are 192.168. 0.1.
+RELEASE=AAABBCCDDEEF1 releases the IP address 192.168.0.0.
+RELEASE=F2FBBCCDDEEF releases IP address 192.168.0.1.
+REQUEST=333333333333 Allocate unused IP addresses in ascending order. The IP addresses are 192.168. 0.2.
+REQUEST=F2FBBCCDDEEF This MAC address is applied for IP address again. The last IP address that has been allocated to this MAC address is preferentially assigned to this MAC address, which is 192.168. 0.1.
