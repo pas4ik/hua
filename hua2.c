@@ -3,8 +3,7 @@
 
 int main()
 {
-    int i, j, Ncom, debug = 0;
-    int com_done;
+    int i, j, Ncom, com_done, debug = 0;
     char com_list[2000][21];
 
     struct {
@@ -13,19 +12,15 @@ int main()
     } ip_pool[256];
 
     // please define the C input here. FOR EXAMPLE: int n; scanf("%d",&n);
-
     scanf("%d", &Ncom);
     for (i = 1; i <= Ncom; i++)
     {
         //printf("%d?", i);
         scanf("%s", &com_list[i]);
     }
-
     for (i = 1; i < 255; i++) { strcpy(ip_pool[i].mac_now, ""); strcpy(ip_pool[i].mac_was, ""); }
-    //for (i = 1; i <= Ncom; i++) printf("%d : %s\n", i, com_list[i]);
     // please finish the FUNCTION body here.
 
-    //strcpy(ip_pool[1].mac_was, "aaaabbbbcccc");
     if (debug)  printf("%s \n", "\nstart");
     com_done = 0;
 
@@ -54,18 +49,33 @@ int main()
             {
                 for (j = 0; j < 255; j++)
                 {
-                    if (strcmp((ip_pool[j].mac_was), "") == 0)      // search first empty
+                    if (strcmp((ip_pool[j].mac_was), "") == 0)      // search first full clear record
                     {
                         strcpy((char *)ip_pool[j].mac_now, (const char *)&com_list[i][8]);
                         strcpy((char *)ip_pool[j].mac_was, (const char *)ip_pool[j].mac_now);
-                        if (debug) printf("%s", "allocated new");
+                        if (debug) printf("%s", "allocated clear");
                         printf("%s%d\n", "192.168.0.", j);
                         com_done = 1;
                         break;
                     }
                 }
             }
-            if (!com_done) printf("%s\n", "NA");
+            if (!com_done)  // if all ip been allocated before
+            {
+                for (j = 0; j < 255; j++)
+                {
+                    if (strcmp((ip_pool[j].mac_now), "") == 0)      // search first now empty record
+                    {
+                        strcpy((char *)ip_pool[j].mac_now, (const char *)&com_list[i][8]);
+                        strcpy((char *)ip_pool[j].mac_was, (const char *)ip_pool[j].mac_now);
+                        if (debug) printf("%s", "allocated available");
+                        printf("%s%d\n", "192.168.0.", j);
+                        com_done = 1;
+                        break;
+                    }
+                }
+            }
+            if (!com_done) printf("%s\n", "NA");        // allocation fails
         } else
         if (!strncmp((const char*)com_list[i],"RELEASE",7))
         {
@@ -84,8 +94,7 @@ int main()
             }
         }
     }
-    
+   
     // please define the C output here. FOR EXAMPLE: printf("%d",a);
-
     return 0;
 }
