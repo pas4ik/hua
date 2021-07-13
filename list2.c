@@ -1,30 +1,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-unsigned int i;
-
 struct Node{
     int val;
     struct Node * next;
 };
 
-struct Node *p, *pt;
+struct Node *p, *p_new;
 
 void reverse(struct Node *l)
 {
-    struct Node *curr = l, *l2 = l;
+    struct Node *prev = NULL, *curr = l, *next;
     
-    while (curr->next != NULL)
+    while (curr != NULL)
     {
-        printf("- %u\n", curr);
-        
-        l2 = curr->next;
-        
-        curr->next->next = curr;
-        
-        curr = l2;
-    }
-    //curr->next = curr;
+        next = curr->next;  // a->b
+        curr->next = prev;  // b->c
+        prev = curr;        // c->d
+        curr = next;        // next stage
+   }
 }
 
 int main(void)
@@ -34,24 +28,20 @@ int main(void)
     p->next->next = (struct Node *)malloc(sizeof(struct Node));
     p->next->next->next = (struct Node *)malloc(sizeof(struct Node));
     p->next->next->next->next = NULL;
-    //printf("%u\n", p);
-    //printf("%u %u\n", p, p+1);
 
-
-    pt = p;
-    printf("%u %u \n", pt, pt->next);
-    printf("%u %u \n", pt->next, pt->next->next);
-    printf("%u %u \n", pt->next->next, pt->next->next->next);
-    printf("%u %u \n", pt->next->next->next, pt->next->next->next->next);
+    printf("%u %u \n", p, p->next);
+    printf("%u %u \n", p->next, p->next->next);
+    printf("%u %u \n", p->next->next, p->next->next->next);
+    printf("%u %u \n", p->next->next->next, p->next->next->next->next);
     
+    p_new = p->next->next->next;
     reverse(p);
-    //pt = p->next->next->next;
-    //printf("%u ---\n", pt);
+    printf("p_new = %u \n", p_new);
     
-    //printf("%u %u \n", pt, pt->next);
-    //printf("%u %u \n", pt->next, pt->next->next);
-    //printf("%u %u \n", pt->next->next, pt->next->next->next);
-    //printf("%u %u \n", pt->next->next->next, pt->next->next->next->next);
+    printf("%u %u \n", p_new, p_new->next);
+    printf("%u %u \n", p_new->next, p_new->next->next);
+    printf("%u %u \n", p_new->next->next, p_new->next->next->next);
+    printf("%u %u \n", p_new->next->next->next, p_new->next->next->next->next);
     
     return 0;
 }
